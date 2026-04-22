@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMOSALAH WASH WASH BIZ - Booking</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AMOSALAH WASH WASH BIZ</h1>
+            <p>OLOIKA CENTER - SHARP BOYZ AT WORK</p>
+        </header>
+
+        <main id="app-container">
+            <section id="game-list-section">
+                <h2>Available Games (KSH 50 each)</h2>
+                <div id="game-list"></div>
+                <button id="calculate-btn" onclick="showBookingSummary()">Review Selection</button>
+            </section>
+
+            <section id="summary-section" style="display:none;"></section>
+            <section id="payment-status-section" style="display:none;"></section>
+            <section id="receipt-section" style="display:none;"></section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

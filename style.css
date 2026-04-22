@@ -1,0 +1,107 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #1a1a1a;
+    color: #00ff00;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+.container {
+    width: 100%;
+    max-width: 500px;
+    border: 2px solid #00ff00;
+    padding: 20px;
+    background-color: #000;
+}
+header {
+    text-align: center;
+    border-bottom: 2px double #00ff00;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+h1 { font-size: 1.5rem; margin: 0; }
+h2 { font-size: 1.2rem; text-decoration: underline; }
+#game-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.game-card {
+    border: 1px solid #00ff00;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    background-color: #0a0a0a;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.game-card:hover {
+    background-color: #003300;
+    box-shadow: 0 0 10px #00ff00;
+}
+.game-card input { margin-right: 15px; transform: scale(1.5); }
+.match-info {
+    display: flex;
+    flex-direction: column;
+}
+.match-name { font-weight: bold; font-size: 1.1rem; color: #fff; }
+.match-details { font-size: 0.8rem; color: #00ff00; margin-top: 5px; opacity: 0.8; }
+button {
+    background-color: #00ff00;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+}
+button:hover { background-color: #00cc00; }
+.receipt {
+    white-space: pre-wrap;
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 1.2;
+    margin-top: 20px;
+    border: 1px dashed #00ff00;
+    padding: 10px;
+}
+.total-highlight {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin: 15px 0;
+    border-top: 1px solid #00ff00;
+    padding-top: 10px;
+}
+.payment-options {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.payment-btn {
+    flex: 1;
+    background-color: #333;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+}
+.payment-btn:hover {
+    background-color: #00ff00;
+    color: #000;
+}
+.loader {
+    border: 4px solid #333;
+    border-top: 4px solid #00ff00;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.status-msg {
+    text-align: center;
+    margin-top: 10px;
+}

@@ -126,7 +126,7 @@ function generateReceipt(method, customerName) {
 
     const receiptContent = `
 ===============================
-   AMOSALAH WASH WASH BIZ
+   NEYMAR'S DSTV SHOW BIZ
        OLOIKA CENTER
        SHARP BOYZ AT WORK
 ===============================

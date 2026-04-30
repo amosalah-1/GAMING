@@ -116,8 +116,8 @@ function initiatePayment(method) {
     } else {
         statusSection.innerHTML = `
             <h2>Awaiting Cash</h2>
-            <p class="status-msg">Please hand over KSH ${total} to the attendant.</p>
-            <button onclick="confirmCashPayment('${name}', ${total})">Attendant: Confirm Cash Received</button>
+            <p class="status-msg">Please hand over KSH ${total} to NEYMAR.</p>
+            <button onclick="confirmCashPayment('${name}', ${total})">Neymar: Confirm Cash Received</button>
             <button style="background: #444; margin-top:10px;" onclick="resetBooking()">Cancel</button>
         `;
     }

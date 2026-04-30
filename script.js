@@ -117,7 +117,7 @@ function initiatePayment(method) {
         statusSection.innerHTML = `
             <h2>Awaiting Cash</h2>
             <p class="status-msg">Please hand over KSH ${total} to the attendant.</p>
-            <button onclick="generateReceipt('CASH', '${name}')">Attendant: Confirm Cash Received</button>
+            <button onclick="confirmCashPayment('${name}', ${total})">Attendant: Confirm Cash Received</button>
             <button style="background: #444; margin-top:10px;" onclick="resetBooking()">Cancel</button>
         `;
     }
@@ -125,6 +125,20 @@ function initiatePayment(method) {
 
 // Step 5: Generate Receipt
 function generateReceipt(method, customerName) {
+    // Basic validation to prevent generating receipt without a confirmed name
+    if (!customerName || customerName.trim() === '') {
+        alert("Error: Customer name is missing for receipt generation.");
+        resetBooking();
+        return;
+    }
+
+    // Ensure selectedGames is not empty, though this should be caught earlier
+    if (selectedGames.length === 0) {
+        alert("Error: No games selected for receipt generation.");
+        resetBooking();
+        return;
+    }
+
     const statusSection = document.getElementById('payment-status-section');
     const receiptSection = document.getElementById('receipt-section');
 
@@ -174,6 +188,20 @@ Receipt No:        ${receiptNo}
     localStorage.removeItem(CONFIG.STORAGE_KEY);
     
     console.log("Booking Confirmed via " + method);
+}
+
+// New function for the intermediate cash confirmation step
+function confirmCashPayment(customerName, totalAmount) {
+    const statusSection = document.getElementById('payment-status-section');
+    statusSection.innerHTML = `
+        <h2>Cash Payment Confirmed</h2>
+        <p class="status-msg">Cash of KSH ${totalAmount} received from <strong>${customerName}</strong>.</p>
+        <p>Click below to finalize the booking and generate the receipt.</p>
+        <div class="actions">
+            <button onclick="generateReceipt('CASH', '${customerName}')">Generate Receipt</button>
+            <button style="background: #444; margin-top:10px;" onclick="resetBooking()">Cancel</button>
+        </div>
+    `;
 }
 
 function resetBooking() {

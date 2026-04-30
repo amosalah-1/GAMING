@@ -1,13 +1,14 @@
 const games = [
-    { match: "Chelsea vs Man City", time: "18:30", date: "2024-05-18", day: "Saturday" },
-    { match: "Arsenal vs Liverpool", time: "16:00", date: "2024-05-19", day: "Sunday" },
-    { match: "Real Madrid vs Barcelona", time: "21:00", date: "2024-05-18", day: "Saturday" },
-    { match: "Man United vs Bayern Munich", time: "20:45", date: "2024-05-21", day: "Tuesday" },
-    { match: "PSG vs Dortmund", time: "22:00", date: "2024-05-22", day: "Wednesday" },
-    { match: "AC Milan vs Inter Milan", time: "19:00", date: "2024-05-20", day: "Monday" }
+    { match: "Arsenal vs Fulham", time: "19:30", date: "2026-05-02", day: "Saturday" },
+    { match: "Man United vs Liverpool", time: "17:30", date: "2026-05-03", day: "Sunday" },
+    { match: "Aston Villa vs Totenham", time: "21:00", date: "2026-05-03", day: "Sunday" },
+    { match: "Chelsea vs Nottm Forest", time: "17:00", date: "2026-05-04", day: "Monday" },
+    { match: "Everton vs Man City", time: "22:00", date: "2026-05-04", day: "Monday" },
+    { match: "Arsenal vs A. Madrid", time: "22:00", date: "2026-05-05", day: "Tuesday" },
+    { match: "Bayaer vs PSG", time: "22:00", date: "2026-05-06", day: "Wednesday" },
 ];
 const RATE_PER_GAME = 50;
-const PAYSTACK_PUBLIC_KEY = 'pk_live_f0ea304b10103570cc216fbe2cd33fcc2b52df3d'; // Replace with your actual Paystack Public Key
+const PAYSTACK_PUBLIC_KEY = 'pk_live_f0ea304b10103570cc216fbe2cd33fcc2b52df3d';
 let selectedGames = [];
 
 // Step 1: Show available games

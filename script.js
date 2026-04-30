@@ -5,7 +5,7 @@ const games = [
     { match: "Chelsea vs Nottm Forest", time: "17:00", date: "2026-05-04", day: "Monday" },
     { match: "Everton vs Man City", time: "22:00", date: "2026-05-04", day: "Monday" },
     { match: "Arsenal vs A. Madrid", time: "22:00", date: "2026-05-05", day: "Tuesday" },
-    { match: "Bayaer vs PSG", time: "22:00", date: "2026-05-06", day: "Wednesday" },
+    { match: "Bayern vs PSG", time: "22:00", date: "2026-05-06", day: "Wednesday" },
 ];
 const RATE_PER_GAME = 50;
 const PAYSTACK_PUBLIC_KEY = 'pk_live_f0ea304b10103570cc216fbe2cd33fcc2b52df3d';

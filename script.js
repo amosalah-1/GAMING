@@ -7,30 +7,47 @@ const games = [
     { match: "Arsenal vs A. Madrid", time: "22:00", date: "2026-05-05", day: "Tuesday" },
     { match: "Bayern vs PSG", time: "22:00", date: "2026-05-06", day: "Wednesday" },
 ];
-const RATE_PER_GAME = 50;
-const PAYSTACK_PUBLIC_KEY = 'pk_live_f0ea304b10103570cc216fbe2cd33fcc2b52df3d';
-let selectedGames = [];
+
+const CONFIG = {
+    RATE_PER_GAME: 50,
+    PAYSTACK_PUBLIC_KEY: 'pk_live_f0ea304b10103570cc216fbe2cd33fcc2b52df3d',
+    STORAGE_KEY: 'selected_games_cache'
+};
+
+let selectedGames = JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEY)) || [];
 
 // Step 1: Show available games
 function init() {
     const listDiv = document.getElementById('game-list');
-    listDiv.innerHTML = games.map((game, index) => `
-        <label class="game-card" for="game-${index}">
-            <input type="checkbox" id="game-${index}" value="${game.match}" onchange="updateSelection()">
-            <div class="match-info">
-                <span class="match-name">${game.match}</span>
-                <div class="match-details">
-                    <span>${game.day}</span> | <span>${game.date}</span> | <span>${game.time}</span>
+    listDiv.innerHTML = games.map((game, index) => {
+        const isChecked = selectedGames.includes(game.match) ? 'checked' : '';
+        return `
+            <label class="game-card" for="game-${index}">
+                <input type="checkbox" id="game-${index}" value="${game.match}" onchange="updateSelection()" ${isChecked}>
+                <div class="match-info">
+                    <span class="match-name">${game.match}</span>
+                    <div class="match-details">
+                        <span>${game.day}</span> | <span>${game.date}</span> | <span>${game.time}</span>
+                    </div>
                 </div>
-            </div>
-        </label>
-    `).join('');
+            </label>
+        `;
+    }).join('');
+    updateSelection(); // Initialize total on load
 }
 
 function updateSelection() {
-    selectedGames = [];
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-    checkboxes.forEach(cb => selectedGames.push(cb.value));
+    const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'));
+    selectedGames = checkboxes.map(cb => cb.value);
+    
+    // Persistence
+    localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(selectedGames));
+
+    // Dynamic UI feedback (assumes an element with id 'floating-total' exists in HTML)
+    const totalDisplay = document.getElementById('floating-total');
+    if (totalDisplay) {
+        totalDisplay.innerText = `Total: KES ${selectedGames.length * CONFIG.RATE_PER_GAME}`;
+    }
 }
 
 // Step 3: Show summary
@@ -40,7 +57,7 @@ function showBookingSummary() {
         return;
     }
 
-    const total = selectedGames.length * RATE_PER_GAME;
+    const total = selectedGames.length * CONFIG.RATE_PER_GAME;
     const summarySection = document.getElementById('summary-section');
     const gameSection = document.getElementById('game-list-section');
 
@@ -50,7 +67,7 @@ function showBookingSummary() {
     summarySection.innerHTML = `
         <h2>Booking Summary</h2>
         <ul>
-            ${selectedGames.map(g => `<li>${g} - KSH ${RATE_PER_GAME}</li>`).join('')}
+            ${selectedGames.map(g => `<li>${g} - KSH ${CONFIG.RATE_PER_GAME}</li>`).join('')}
         </ul>
         <div class="total-highlight">TOTAL COST: KES ${total}</div>
         
@@ -68,23 +85,22 @@ function showBookingSummary() {
 // Step 4: Initiate Payment and Wait for Confirmation
 function initiatePayment(method) {
     const summarySection = document.getElementById('summary-section');
-    const statusSection = document.getElementById('payment-status-section');
+    const name = document.getElementById('customer-name').value.trim();
 
+    if (!name) {
+        alert("Please enter your name to proceed.");
+        return;
+    }
+
+    const statusSection = document.getElementById('payment-status-section');
     summarySection.style.display = 'none';
     statusSection.style.display = 'block';
 
-    const name = document.getElementById('customer-name').value;
-    const total = selectedGames.length * RATE_PER_GAME;
+    const total = selectedGames.length * CONFIG.RATE_PER_GAME;
 
     if (method === 'PAYSTACK') {
-        if (!name) {
-            alert("Please enter your name to proceed with the payment.");
-            resetBooking();
-            return;
-        }
-
         let handler = PaystackPop.setup({
-            key: PAYSTACK_PUBLIC_KEY,
+            key: CONFIG.PAYSTACK_PUBLIC_KEY,
             email: 'customer@amosalah.biz', // Placeholder email required by Paystack SDK
             amount: total * 100, // Paystack expects amount in subunits (KES cents)
             currency: 'KES',
@@ -100,8 +116,8 @@ function initiatePayment(method) {
     } else {
         statusSection.innerHTML = `
             <h2>Awaiting Cash</h2>
-            <p class="status-msg">Please hand over KSH ${selectedGames.length * RATE_PER_GAME} to the attendant.</p>
-            <button onclick="generateReceipt('CASH', '${name || 'Guest'}')">Attendant: Confirm Cash Received</button>
+            <p class="status-msg">Please hand over KSH ${total} to the attendant.</p>
+            <button onclick="generateReceipt('CASH', '${name}')">Attendant: Confirm Cash Received</button>
             <button style="background: #444; margin-top:10px;" onclick="resetBooking()">Cancel</button>
         `;
     }
@@ -115,14 +131,14 @@ function generateReceipt(method, customerName) {
     statusSection.style.display = 'none';
     receiptSection.style.display = 'block';
 
-    const total = selectedGames.length * RATE_PER_GAME;
+    const total = selectedGames.length * CONFIG.RATE_PER_GAME;
     const date = new Date();
     const dateStr = date.toLocaleDateString();
     const timeStr = date.toLocaleTimeString();
     const receiptNo = 'AWW-' + Math.floor(Math.random() * 100000).toString().padStart(5, '0');
 
     let gamesListText = selectedGames.map((game, i) => 
-        `  ${i + 1}. ${game.padEnd(20, '.')} KSH ${RATE_PER_GAME}`
+        `  ${i + 1}. ${game.padEnd(20, '.')} KSH ${CONFIG.RATE_PER_GAME}`
     ).join('\n');
 
     const receiptContent = `
@@ -148,10 +164,15 @@ Receipt No:        ${receiptNo}
 
     receiptSection.innerHTML = `
         <div class="receipt">${receiptContent}</div>
-        <button onclick="window.print()">Print Receipt</button>
-        <button onclick="location.reload()">New Booking</button>
+        <div class="actions">
+            <button onclick="window.print()">Print Receipt</button>
+            <button onclick="clearAndRestart()">New Booking</button>
+        </div>
     `;
 
+    // Clear cache after successful booking
+    localStorage.removeItem(CONFIG.STORAGE_KEY);
+    
     console.log("Booking Confirmed via " + method);
 }
 
@@ -159,6 +180,11 @@ function resetBooking() {
     document.getElementById('summary-section').style.display = 'none';
     document.getElementById('payment-status-section').style.display = 'none';
     document.getElementById('game-list-section').style.display = 'block';
+}
+
+function clearAndRestart() {
+    localStorage.removeItem(CONFIG.STORAGE_KEY);
+    location.reload();
 }
 
 window.onload = init;

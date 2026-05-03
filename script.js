@@ -1,5 +1,5 @@
 const games = [
-    { match: "Arsenal vs Fulham", time: "19:30", date: "2026-05-02", day: "Saturday" },
+    { match: "Bournemouth vs Palace", time: "16:00", date: "2026-05-03", day: "Sunday" },
     { match: "Man United vs Liverpool", time: "17:30", date: "2026-05-03", day: "Sunday" },
     { match: "Aston Villa vs Totenham", time: "21:00", date: "2026-05-03", day: "Sunday" },
     { match: "Chelsea vs Nottm Forest", time: "17:00", date: "2026-05-04", day: "Monday" },
